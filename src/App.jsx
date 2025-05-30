@@ -8,7 +8,7 @@ import DarkModeToggle from './DarkModeToggle';
 import Charts from './Charts';
 
 function App() {
-  const { user } = useAuth();
+  const { user,logout } = useAuth();
 
 if (!user) {
   return <Login />;
@@ -74,6 +74,13 @@ if (!user) {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-8">
       <DarkModeToggle />
+      <button
+  onClick={logout}
+  className="absolute top-4 left-4 px-3 py-1 rounded text-sm font-medium bg-red-100 text-red-600 hover:bg-red-200"
+>
+  Logout
+</button>
+
 
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">Expense Tracker</h1>
 
