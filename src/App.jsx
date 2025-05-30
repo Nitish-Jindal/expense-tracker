@@ -1,3 +1,5 @@
+import { useAuth } from './authContext';
+import Login from './Login';
 import { useEffect, useState } from 'react';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
@@ -6,6 +8,12 @@ import DarkModeToggle from './DarkModeToggle';
 import Charts from './Charts';
 
 function App() {
+  const { user } = useAuth();
+
+if (!user) {
+  return <Login />;
+}
+
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem('transactions');
     return saved ? JSON.parse(saved) : [];

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -7,13 +7,18 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    // Load from localStorage on first render
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const login = (email, password) => {
-    // Dummy check: accept any non-empty email and password
     return new Promise((resolve, reject) => {
       if (email && password) {
-        setUser({ email });
+        const userData = { email };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
         resolve();
       } else {
         reject(new Error('Invalid credentials'));
@@ -22,12 +27,12 @@ export function AuthProvider({ children }) {
   };
 
   const signup = (email, password) => {
-    // Simulate signup same as login
-    return login(email, password);
+    return login(email, password); // reuse login logic
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('user');
   };
 
   return (
